@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Subscriptions from './pages/Subscriptions'
 import Plans from './pages/Plans'
+import UIMockups from './pages/UIMockups'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/subscriptions" element={<Subscriptions />} />
         <Route path="/plans" element={<Plans />} />
+        <Route path="/ui-kit" element={<UIMockups />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </Layout>

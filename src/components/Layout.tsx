@@ -4,6 +4,7 @@ const nav = [
   { path: '/dashboard', label: 'Dashboard' },
   { path: '/subscriptions', label: 'Subscriptions' },
   { path: '/plans', label: 'Plans' },
+  { path: '/ui-kit', label: 'UI Kit (Mockups)' },
 ]
 
 export default function Layout({ children }: { children: React.ReactNode }) {
