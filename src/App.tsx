@@ -4,7 +4,6 @@ import Dashboard from './pages/Dashboard'
 import Subscriptions from './pages/Subscriptions'
 import Plans from './pages/Plans'
 import Landing from './pages/Landing'
-import PrepaidBalanceCard from './components/PrepaidBalance'
 
 function App() {
   return (

@@ -9,7 +9,7 @@ export const DollarIcon = ({ size = 20, color = "#00D3F2" }) => {
 }
 
 
-export default function PrepaidBalanceCard({ balance = 30, maxBalance = 30, paymentAmount = 10 }) {
+export default function PrepaidBalanceCard({ balance = 30, maxBalance = 30, paymentAmount = 10, onTopUp }: {balance:number, maxBalance:number, paymentAmount:number, onTopUp:()=>void}) {
     const payments = Math.floor(balance / paymentAmount);
     const fillPct = Math.min((balance / maxBalance) * 100, 100);
 
@@ -50,7 +50,7 @@ export default function PrepaidBalanceCard({ balance = 30, maxBalance = 30, paym
                     </div>
                 </div>
 
-                <button className="prepaid-card__button" aria-label="Top up balance">
+                <button className="prepaid-card__button" aria-label="Top up balance" onClick={onTopUp}>
                     <DollarIcon size={16} color="black" />
                     <span className="prepaid-card__button-text">Top up balance</span>
                 </button>
