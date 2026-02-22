@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 type PlanStatus = 'Active' | 'Archived'
 type PlanInterval = 'Monthly' | 'Yearly'
@@ -91,6 +92,23 @@ export default function Plans() {
 
   return (
     <div style={{ padding: '1.5rem 2rem', background: '#0a0a0a', minHeight: '100vh' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <Link
+          to="/plans/create"
+          style={{
+            display: 'inline-block',
+            padding: '0.5rem 1rem',
+            background: '#3b82f6',
+            color: '#fff',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            textDecoration: 'none',
+          }}
+        >
+          Create plan
+        </Link>
+      </div>
       {/* Search and Filters */}
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {/* Search */}

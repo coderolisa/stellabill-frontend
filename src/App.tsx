@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import Subscriptions from './pages/Subscriptions'
 import Plans from './pages/Plans'
+import CreatePlan from './pages/CreatePlan'
 import Landing from './pages/Landing'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
       <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
       <Route path="/subscriptions" element={<Layout><Subscriptions /></Layout>} />
       <Route path="/plans" element={<Layout><Plans /></Layout>} />
+      <Route path="/plans/create" element={<Layout><CreatePlan /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
