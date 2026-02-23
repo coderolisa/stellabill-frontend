@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
 type PlanStatus = 'Active' | 'Archived'
 type PlanInterval = 'Monthly' | 'Yearly'
@@ -91,6 +92,30 @@ export default function Plans() {
 
   return (
     <div style={{ padding: '1.5rem 2rem', background: '#0a0a0a', minHeight: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h1 style={{ color: '#fff', fontSize: '1.875rem', fontWeight: 700, margin: 0 }}>Plans</h1>
+        <Link 
+          to="/plans/create"
+          style={{
+            background: '#00d4aa',
+            color: '#000',
+            padding: '0.625rem 1.25rem',
+            borderRadius: '8px',
+            fontWeight: 600,
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+            boxShadow: '0 4px 12px rgba(0, 212, 170, 0.2)'
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Create plan
+        </Link>
+      </div>
       {/* Search and Filters */}
       <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {/* Search */}
