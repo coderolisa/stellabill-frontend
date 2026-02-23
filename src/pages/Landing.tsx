@@ -6,6 +6,7 @@ import FlowDiagram from '../components/Landing/FlowDiagram'
 import TechBadges from "../components/landing/TechBadges";
 import SubscriptionActions from "@/components/SubscriptionActions";
 import PricingCards from '../components/PricingCards'
+import CTACards from '../components/CTACards'
 
 export default function Landing() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
@@ -42,8 +43,8 @@ export default function Landing() {
         {/* Technology Badges */}
         <TechBadges />
 
-        {/* Pricing Cards */}
-        <PricingCards />
+        {/* CTA Cards */}
+        <CTACards />
 
         {/* Sections for anchor links */}
         <div
