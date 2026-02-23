@@ -17,16 +17,20 @@
   justify-content: center;
 }
 
-/* Background SVG with rings and flow dots */
-.backgroundSvg {
+/* Background SVG with rings - now at container level */
+.ringsSvg {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   pointer-events: none;
+  animation: pulseRings 6s ease-in-out infinite;
 }
+
+/* Removed old .backgroundSvg - no longer needed */
 
 /* Individual nodes positioned absolutely */
 .node {
@@ -60,16 +64,6 @@
 .nodeVault {
   width: 200px;
   height: 200px;
-}
-
-/* SVG rings container for vault */
-.ringsSvg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  animation: pulseRings 4s ease-in-out infinite;
 }
 
 @keyframes pulseRings {
@@ -182,7 +176,7 @@
     order: 3;
   }
 
-  .backgroundSvg {
+  .ringsSvg {
     display: none;
   }
 

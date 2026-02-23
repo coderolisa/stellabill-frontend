@@ -5,40 +5,37 @@ const FlowDiagram: React.FC = () => {
     return (
         <section className={styles.diagramSection}>
             <div className={styles.diagramContainer}>
-                {/* Background SVG with rings and flow indicators */}
+                {/* Large background SVG rings spanning entire container */}
                 <svg
-                    className={styles.backgroundSvg}
-                    viewBox="0 0 1200 400"
-                    preserveAspectRatio="xMidYMid meet"
+                    className={styles.ringsSvg}
+                    viewBox="0 0 800 400"
+                    preserveAspectRatio="xMidYMid slice"
                     aria-hidden="true"
                 >
-                    {/* Concentric rings around vault (center at 600, radius grows) */}
-                    <circle cx="600" cy="200" r="150" fill="none" stroke="rgba(13, 235, 213, 0.15)" strokeWidth="1" />
-                    <circle cx="600" cy="200" r="130" fill="none" stroke="rgba(13, 235, 213, 0.1)" strokeWidth="1" />
-                    <circle cx="600" cy="200" r="110" fill="none" stroke="rgba(13, 235, 213, 0.08)" strokeWidth="1" />
-                    <circle cx="600" cy="200" r="90" fill="none" stroke="rgba(13, 235, 213, 0.05)" strokeWidth="1" />
+                    {/* Concentric rings around vault */}
+                    <circle cx="400" cy="200" r="350" fill="none" stroke="rgba(13, 235, 213, 0.05)" strokeWidth="1" />
+                    <circle cx="400" cy="200" r="250" fill="none" stroke="rgba(13, 235, 213, 0.08)" strokeWidth="1" />
+                    <circle cx="400" cy="200" r="150" fill="none" stroke="rgba(13, 235, 213, 0.12)" strokeWidth="1" />
+                    <circle cx="400" cy="200" r="80" fill="none" stroke="rgba(13, 235, 213, 0.15)" strokeWidth="1.5" />
 
-                    {/* Flow indicators: subtle glowing dots/trails */}
+                    {/* Glowing flow indicator dots */}
                     {/* Left to center flow */}
-                    <circle cx="250" cy="195" r="2" fill="#0debd5" opacity="0.6" />
-                    <circle cx="350" cy="195" r="2" fill="#0debd5" opacity="0.4" />
-                    <circle cx="450" cy="195" r="2" fill="#0debd5" opacity="0.2" />
+                    <circle cx="150" cy="195" r="2.5" fill="#0debd5" opacity="0.8" />
+                    <circle cx="220" cy="190" r="2" fill="#0debd5" opacity="0.6" />
+                    <circle cx="290" cy="200" r="1.5" fill="#0debd5" opacity="0.4" />
 
                     {/* Center to right flow */}
-                    <circle cx="750" cy="205" r="2" fill="#0debd5" opacity="0.2" />
-                    <circle cx="850" cy="205" r="2" fill="#0debd5" opacity="0.4" />
-                    <circle cx="950" cy="205" r="2" fill="#0debd5" opacity="0.6" />
+                    <circle cx="510" cy="205" r="1.5" fill="#0debd5" opacity="0.4" />
+                    <circle cx="580" cy="210" r="2" fill="#0debd5" opacity="0.6" />
+                    <circle cx="650" cy="200" r="2.5" fill="#0debd5" opacity="0.8" />
 
-                    {/* Glow filters */}
-                    <defs>
-                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                            <feMerge>
-                                <feMergeNode in="coloredBlur" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
+                    {/* Ambient scattered dots around diagram */}
+                    <circle cx="100" cy="120" r="1.5" fill="#0debd5" opacity="0.5" />
+                    <circle cx="700" cy="130" r="1.5" fill="#0debd5" opacity="0.5" />
+                    <circle cx="750" cy="280" r="1.2" fill="#0debd5" opacity="0.4" />
+                    <circle cx="50" cy="300" r="1.2" fill="#0debd5" opacity="0.4" />
+                    <circle cx="720" cy="160" r="1" fill="#0debd5" opacity="0.6" />
+                    <circle cx="80" cy="160" r="1" fill="#0debd5" opacity="0.6" />
                 </svg>
 
                 {/* Card/Node: User Wallet */}
@@ -51,14 +48,8 @@ const FlowDiagram: React.FC = () => {
 
                 {/* Card/Node: Smart Contract Vault (Center) */}
                 <div className={`${styles.node} ${styles.nodeVault}`}>
-                    <svg className={styles.ringsSvg} viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
-                        {/* Pulsing rings for vault emphasis */}
-                        <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(13, 235, 213, 0.25)" strokeWidth="1" />
-                        <circle cx="100" cy="100" r="75" fill="none" stroke="rgba(13, 235, 213, 0.18)" strokeWidth="1" />
-                        <circle cx="100" cy="100" r="60" fill="none" stroke="rgba(13, 235, 213, 0.12)" strokeWidth="1" />
-                    </svg>
                     <div className={styles.nodeBox}>
-                        <div className={styles.nodeLabel}>SMART CONTRACT</div>
+                        <div className={styles.nodeLabel} style={{ color: '#0debd5', fontSize: '0.5rem' }}>SMART CONTRACT</div>
                         <div className={styles.nodeTitle}>Vault</div>
                     </div>
                 </div>
@@ -72,10 +63,7 @@ const FlowDiagram: React.FC = () => {
                 </div>
             </div>
 
-            {/* Accessibility caption */}
-            {/* <div className={styles.caption}>
-                User deposits USDC to vault; vault releases funds to merchant on subscription intervals.
-            </div> */}
+        
         </section>
     );
 };
