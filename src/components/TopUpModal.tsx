@@ -16,7 +16,6 @@ const QUICK_SELECT_OPTIONS = [
 export default function TopUpModal({ isOpen, onClose }: TopUpModalProps) {
   const [amount, setAmount] = useState<string>('0.00');
   const [selectedQs, setSelectedQs] = useState<string | null>(null);
-  const [isFocused, setIsFocused] = useState(false);
 
   const currentBalance = 30;
   const planPrice = 10;
@@ -50,7 +49,6 @@ export default function TopUpModal({ isOpen, onClose }: TopUpModalProps) {
   };
 
   const handleInputBlur = () => {
-    setIsFocused(false);
     // Format to 2 decimal places if valid number
     const num = parseFloat(amount);
     if (!isNaN(num)) {
@@ -126,7 +124,6 @@ export default function TopUpModal({ isOpen, onClose }: TopUpModalProps) {
                 className="amount-input"
                 value={amount}
                 onChange={handleInputChange}
-                onFocus={() => setIsFocused(true)}
                 onBlur={handleInputBlur}
                 placeholder="0.00"
               />

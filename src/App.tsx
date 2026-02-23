@@ -6,8 +6,15 @@ import SubscriptionDetail from './pages/SubscriptionDetail'
 import Plans from './pages/Plans'
 import UIMockups from './pages/UIMockups'
 import Landing from './pages/Landing'
+import UIMockups from './pages/UIMockups'
+import UsageBilling from './pages/UsageBilling'
 import OnboardingSuccess from './pages/OnboardingSuccess'
+<<<<<<< detail-section
 import CreatePlan from './pages/CreatePlan'
+=======
+import CreatePlan from "./pages/CreatePlan";
+import Pricing from "./pages/Pricing";
+>>>>>>> main
 
 function App() {
   return (
@@ -16,13 +23,18 @@ function App() {
       <Route path="/onboarding-success" element={<OnboardingSuccess />} />
       <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
       <Route path="/subscriptions" element={<Layout><Subscriptions /></Layout>} />
+      <Route path="/subscriptions/:id/usage" element={<Layout><UsageBilling /></Layout>} />
+      <Route path="/plans" element={<Layout><Plans /></Layout>} />
+      <Route path="/ui-kit" element={<Layout><UIMockups /></Layout>} />
       <Route path="/subscriptions/:id" element={<Layout><SubscriptionDetail /></Layout>} />
       <Route path="/plans" element={<Layout><Plans /></Layout>} />
       <Route path="/plans/create" element={<CreatePlan />} />
       <Route path="/ui-kit" element={<UIMockups />} />
+      <Route path="/plans/new" element={<CreatePlan />} />
+      <Route path="/pricing" element={<Pricing />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }
 
-export default App
+export default App;

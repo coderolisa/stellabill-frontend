@@ -1,6 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
+import PauseSubscriptionModal from '../components/PauseSubscriptionModal';
+import { subscriptions } from '../api/client';
 import { Subscription } from '@/types/subscription';
+import UsageThisPeriod from '../components/UsageThisPeriod';
 import './Subscriptions.css';
 
 interface SubscriptionWithIcon extends Omit<Subscription, 'icon'> {
@@ -9,7 +12,7 @@ interface SubscriptionWithIcon extends Omit<Subscription, 'icon'> {
   coverage: string;
 }
 
-const DATA: SubscriptionWithIcon[] = [
+const INITIAL_DATA: SubscriptionWithIcon[] = [
   {
     id: 'SUB-001',
     planName: 'Premium Access',
@@ -25,10 +28,10 @@ const DATA: SubscriptionWithIcon[] = [
     subscribedSince: 'Dec 15, 2025',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
-        <path d="M18 14h-8"/>
-        <path d="M15 18h-5"/>
-        <path d="M10 6h8v4h-8V6Z"/>
+        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" />
+        <path d="M18 14h-8" />
+        <path d="M15 18h-5" />
+        <path d="M10 6h8v4h-8V6Z" />
       </svg>
     )
   },
@@ -47,7 +50,7 @@ const DATA: SubscriptionWithIcon[] = [
     subscribedSince: 'Feb 20, 2026',
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-         <path d="M17.5 19c.7 0 1.3-.2 1.8-.7.5-.5.7-1.1.7-1.8 0-1.3-1-2.4-2.3-2.5-.2-2.1-1.9-3.5-4-3.5-1.5 0-2.8.7-3.6 1.8-.3-.1-.6-.1-.9-.1-1.4 0-2.5 1.1-2.5 2.5 0 .1 0 .2.1.3C5.5 15.6 4.5 16.7 4.5 18c0 1.4 1.1 2.5 2.5 2.5h10.5Z" />
+        <path d="M17.5 19c.7 0 1.3-.2 1.8-.7.5-.5.7-1.1.7-1.8 0-1.3-1-2.4-2.3-2.5-.2-2.1-1.9-3.5-4-3.5-1.5 0-2.8.7-3.6 1.8-.3-.1-.6-.1-.9-.1-1.4 0-2.5 1.1-2.5 2.5 0 .1 0 .2.1.3C5.5 15.6 4.5 16.7 4.5 18c0 1.4 1.1 2.5 2.5 2.5h10.5Z" />
       </svg>
     )
   },
@@ -65,9 +68,9 @@ const DATA: SubscriptionWithIcon[] = [
     lastPayment: 'Mar 01, 2026',
     subscribedSince: 'Jan 01, 2026',
     icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-        </svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
     )
   },
   {
@@ -84,34 +87,66 @@ const DATA: SubscriptionWithIcon[] = [
     lastPayment: 'Feb 28, 2026',
     subscribedSince: 'Nov 15, 2025',
     icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
-            <path d="M12 12L2.5 20.5"></path>
-            <path d="M12 12V22"></path>
-            <path d="M12 12L21.5 20.5"></path>
-        </svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
+        <path d="M12 12L2.5 20.5"></path>
+        <path d="M12 12V22"></path>
+        <path d="M12 12L21.5 20.5"></path>
+      </svg>
     )
   }
 ];
 
 export default function Subscriptions() {
+  const [data, setData] = useState<SubscriptionWithIcon[]>(INITIAL_DATA);
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  const handleViewFullUsage = () => {
+    console.log('Navigate to full usage page');
+    // TODO: Navigate to full usage page or expand section
+  };
+  // Pause Modal State
+  const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState(false);
+
   const filteredData = useMemo(() => {
-    if (activeFilter === 'All') return DATA;
-    return DATA.filter(sub => sub.status === activeFilter);
-  }, [activeFilter]);
+    if (activeFilter === 'All') return data;
+    return data.filter(sub => sub.status === activeFilter);
+  }, [activeFilter, data]);
 
   const selectedSub = useMemo(() => {
-    return DATA.find(sub => sub.id === selectedId);
-  }, [selectedId]);
+    return data.find(sub => sub.id === selectedId);
+  }, [selectedId, data]);
 
   const stats = {
-    All: DATA.length,
-    Active: DATA.filter(s => s.status === 'Active').length,
-    Paused: DATA.filter(s => s.status === 'Paused').length,
-    Cancelled: DATA.filter(s => s.status === 'Cancelled').length,
+    All: data.length,
+    Active: data.filter(s => s.status === 'Active').length,
+    Paused: data.filter(s => s.status === 'Paused').length,
+    Cancelled: data.filter(s => s.status === 'Cancelled').length,
+  };
+
+  const handlePauseConfirm = async () => {
+    if (!selectedId) return;
+    setIsActionLoading(true);
+    try {
+      await subscriptions.pause(selectedId);
+      setData(prev => prev.map(sub =>
+        sub.id === selectedId ? { ...sub, status: 'Paused' as const } : sub
+      ));
+      setIsPauseModalOpen(false);
+    } catch (err) {
+      console.error('Failed to pause:', err);
+      setIsPauseModalOpen(false);
+    } finally {
+      setIsActionLoading(false);
+    }
+  };
+
+  const handleResume = async (id: string) => {
+    setData(prev => prev.map(sub =>
+      sub.id === id ? { ...sub, status: 'Active' as const } : sub
+    ));
   };
 
   const getStatusIcon = (status: string) => {
@@ -119,9 +154,15 @@ export default function Subscriptions() {
       case 'Active':
         return (
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path d="M2.5 8.5L5.5 5.5L8.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M8.5 3.5V6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M5.5 3.5H8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M2.5 8.5L5.5 5.5L8.5 8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M8.5 3.5V6.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M5.5 3.5H8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        );
+      case 'Paused':
+        return (
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 8v8M14 8v8" />
           </svg>
         );
       default:
@@ -130,13 +171,21 @@ export default function Subscriptions() {
   };
 
   if (selectedSub) {
+    // Mock usage data - replace with actual API data
+    const isUsageBased = true; // Show usage for all plans
+    const usageData = {
+      billingPeriod: 'Mar 1 — Mar 31',
+      usage: '32450 API calls',
+      estimatedCharge: '10 USDC'
+    };
+
     return (
       <div className="subscriptions-container">
         <nav className="breadcrumb">
           <Link to="/dashboard">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
             Home
           </Link>
@@ -176,20 +225,91 @@ export default function Subscriptions() {
 
           <div className="card-separator-small"></div>
 
-          <div className="detail-grid">
-            <div className="detail-item">
-              <span className="detail-label">Last payment</span>
-              <span className="detail-value">{selectedSub.lastPayment}</span>
+          <div className="detail-grid-container" style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem' }}>
+            <div className="detail-grid">
+              <div className="detail-item">
+                <span className="detail-label">Last payment</span>
+                <span className="detail-value">{selectedSub.lastPayment}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Next charge</span>
+                <span className="detail-value">{selectedSub.nextCharge}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Subscribed since</span>
+                <span className="detail-value">{selectedSub.subscribedSince}</span>
+              </div>
             </div>
-            <div className="detail-item">
-              <span className="detail-label">Next charge</span>
-              <span className="detail-value">{selectedSub.nextCharge}</span>
-            </div>
-            <div className="detail-item">
-              <span className="detail-label">Subscribed since</span>
-              <span className="detail-value">{selectedSub.subscribedSince}</span>
+
+            <div className="detail-actions-sidebar">
+              <div style={{ background: '#111', border: '1px solid #222', borderRadius: '16px', padding: '1.25rem' }}>
+                <h4 style={{ margin: '0 0 1rem', color: '#666', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {selectedSub.status === 'Active' && (
+                    <button
+                      onClick={() => setIsPauseModalOpen(true)}
+                      style={{
+                        background: '#1a1a1a',
+                        color: '#f97316',
+                        border: '1px solid #333',
+                        padding: '10px',
+                        borderRadius: '10px',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        fontWeight: 500,
+                        fontSize: '14px',
+                        transition: '0.2s'
+                      }}
+                      onMouseOver={(e: MouseEvent<HTMLButtonElement>) => (e.currentTarget.style.background = '#222')}
+                      onMouseOut={(e: MouseEvent<HTMLButtonElement>) => (e.currentTarget.style.background = '#1a1a1a')}
+                    >
+                      Pause subscription
+                    </button>
+                  )}
+                  {selectedSub.status === 'Paused' && (
+                    <button
+                      onClick={() => handleResume(selectedSub.id)}
+                      style={{
+                        background: 'linear-gradient(90deg, #10b981 0%, #34d399 100%)',
+                        color: '#000',
+                        border: 'none',
+                        padding: '10px',
+                        borderRadius: '10px',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                        fontWeight: 600,
+                        fontSize: '14px'
+                      }}
+                    >
+                      Resume subscription
+                    </button>
+                  )}
+                  <button style={{
+                    background: 'transparent',
+                    color: '#666',
+                    border: '1px solid #222',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    fontSize: '13px'
+                  }}>
+                    Cancel billing
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Usage This Period Section */}
+        <div style={{ marginTop: '1.5rem' }}>
+          <UsageThisPeriod
+            billingPeriod={usageData?.billingPeriod}
+            usage={usageData?.usage}
+            estimatedCharge={usageData?.estimatedCharge}
+            onViewFullUsage={handleViewFullUsage}
+          />
         </div>
       </div>
     );
@@ -200,8 +320,8 @@ export default function Subscriptions() {
       <nav className="breadcrumb">
         <Link to="/dashboard">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
           </svg>
           Home
         </Link>
@@ -247,7 +367,7 @@ export default function Subscriptions() {
                 </div>
               </div>
               <span className={`status-pill ${sub.status.toLowerCase()}`}>
-                 {getStatusIcon(sub.status)}
+                {getStatusIcon(sub.status)}
                 {sub.status}
               </span>
             </div>
@@ -282,7 +402,7 @@ export default function Subscriptions() {
               </div>
               <div className="detail-row">
                 <span className="row-label">
-                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -295,8 +415,8 @@ export default function Subscriptions() {
             </div>
 
             <div className="card-actions">
-              <button 
-                onClick={() => setSelectedId(sub.id)} 
+              <button
+                onClick={() => setSelectedId(sub.id)}
                 className="manage-btn"
               >
                 Manage
@@ -315,7 +435,7 @@ export default function Subscriptions() {
 
       <div className="bottom-info-card">
         <div className="info-icon-circle">
-           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="1" x2="12" y2="23"></line>
             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
           </svg>
@@ -325,6 +445,13 @@ export default function Subscriptions() {
           <p>Each subscription uses a prepaid vault model. Your USDC balance is held securely in a smart contract, and payments are automatically deducted on your billing cycle. You can top up anytime to extend coverage.</p>
         </div>
       </div>
+
+      <PauseSubscriptionModal
+        isOpen={isPauseModalOpen}
+        onClose={() => setIsPauseModalOpen(false)}
+        onConfirm={handlePauseConfirm}
+        isLoading={isActionLoading}
+      />
     </div>
   );
 }
