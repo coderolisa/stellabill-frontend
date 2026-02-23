@@ -10,6 +10,7 @@ import UIMockups from './pages/UIMockups'
 import UsageBilling from './pages/UsageBilling'
 import OnboardingSuccess from './pages/OnboardingSuccess'
 import CreatePlan from "./pages/CreatePlan";
+import Pricing from "./pages/Pricing";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/plans" element={<Layout><Plans /></Layout>} />
       <Route path="/ui-kit" element={<UIMockups />} />
       <Route path="/plans/new" element={<CreatePlan />} />
+      <Route path="/pricing" element={<Pricing />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
