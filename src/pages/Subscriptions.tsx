@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PauseSubscriptionModal from '../components/PauseSubscriptionModal';
 import { subscriptions } from '../api/client';
 import { Subscription } from '@/types/subscription';
+import UsageThisPeriod from '../components/UsageThisPeriod';
 import './Subscriptions.css';
 
 interface SubscriptionWithIcon extends Omit<Subscription, 'icon'> {
@@ -101,6 +102,10 @@ export default function Subscriptions() {
   const [activeFilter, setActiveFilter] = useState('All');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  const handleViewFullUsage = () => {
+    console.log('Navigate to full usage page');
+    // TODO: Navigate to full usage page or expand section
+  };
   // Pause Modal State
   const [isPauseModalOpen, setIsPauseModalOpen] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
@@ -166,6 +171,14 @@ export default function Subscriptions() {
   };
 
   if (selectedSub) {
+    // Mock usage data - replace with actual API data
+    const isUsageBased = true; // Show usage for all plans
+    const usageData = {
+      billingPeriod: 'Mar 1 — Mar 31',
+      usage: '32450 API calls',
+      estimatedCharge: '10 USDC'
+    };
+
     return (
       <div className="subscriptions-container">
         <nav className="breadcrumb">
@@ -289,12 +302,15 @@ export default function Subscriptions() {
           </div>
         </div>
 
-        <PauseSubscriptionModal
-          isOpen={isPauseModalOpen}
-          onClose={() => setIsPauseModalOpen(false)}
-          onConfirm={handlePauseConfirm}
-          isLoading={isActionLoading}
-        />
+        {/* Usage This Period Section */}
+        <div style={{ marginTop: '1.5rem' }}>
+          <UsageThisPeriod
+            billingPeriod={usageData?.billingPeriod}
+            usage={usageData?.usage}
+            estimatedCharge={usageData?.estimatedCharge}
+            onViewFullUsage={handleViewFullUsage}
+          />
+        </div>
       </div>
     );
   }
