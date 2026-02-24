@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 import LandingNavbar from './LandingNavbar'
 
 const nav = [
@@ -9,7 +9,7 @@ const nav = [
   { path: '/ui-kit', label: 'UI Kit (Mockups)' },
 ]
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   const location = useLocation()
 
   return (
@@ -45,8 +45,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             ))}
           </nav>
         </aside>
-        <main style={{ flex: 1, overflow: 'auto' }}>
-          {children}
+
+        <main style={{ flex: 1, padding: '2rem', overflow: 'auto' }}>
+          <Outlet />
         </main>
       </div>
     </div>
