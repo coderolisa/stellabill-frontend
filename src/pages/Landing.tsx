@@ -134,6 +134,8 @@ export default function Landing() {
           </div>
         </section>
 
+          <FAQ />
+
           <section id="docs" style={{ padding: "6rem 0", minHeight: "400px" }}>
             <h2
               style={{
