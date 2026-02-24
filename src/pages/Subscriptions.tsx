@@ -4,6 +4,7 @@ import PauseSubscriptionModal from '../components/PauseSubscriptionModal';
 import CancelSubscriptionModal from '../components/CancelSubscriptionModal';
 import { subscriptions } from '../api/client';
 import { Subscription } from '@/types/subscription';
+import UsageThisPeriod from '../components/UsageThisPeriod';
 import './Subscriptions.css';
 
 interface SubscriptionWithIcon extends Omit<Subscription, 'icon'> {
@@ -107,6 +108,11 @@ export default function Subscriptions() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
 
+  const handleViewFullUsage = () => {
+    console.log('Navigate to full usage page');
+    // TODO: Navigate to full usage page or expand section
+  };
+
   const filteredData = useMemo(() => {
     if (activeFilter === 'All') return data;
     return data.filter(sub => sub.status === activeFilter);
@@ -192,6 +198,13 @@ export default function Subscriptions() {
   };
 
   if (selectedSub) {
+    // Mock usage data - replace with actual API data
+    const usageData = {
+      billingPeriod: 'Mar 1 — Mar 31',
+      usage: '32450 API calls',
+      estimatedCharge: '10 USDC'
+    };
+
     return (
       <div className="subscriptions-container">
         <nav className="breadcrumb">
@@ -273,8 +286,6 @@ export default function Subscriptions() {
                         fontSize: '14px',
                         transition: '0.2s'
                       }}
-                      onMouseOver={(e: MouseEvent<HTMLButtonElement>) => (e.currentTarget.style.background = '#222')}
-                      onMouseOut={(e: MouseEvent<HTMLButtonElement>) => (e.currentTarget.style.background = '#1a1a1a')}
                     >
                       Pause subscription
                     </button>
@@ -320,20 +331,29 @@ export default function Subscriptions() {
           </div>
         </div>
 
+        {/* Usage This Period Section */}
+        <div style={{ marginTop: '1.5rem' }}>
+          <UsageThisPeriod
+            billingPeriod={usageData?.billingPeriod}
+            usage={usageData?.usage}
+            estimatedCharge={usageData?.estimatedCharge}
+            onViewFullUsage={handleViewFullUsage}
+          />
+        </div>
+
         <PauseSubscriptionModal
           isOpen={isPauseModalOpen}
           onClose={() => setIsPauseModalOpen(false)}
           onConfirm={handlePauseConfirm}
           isLoading={isActionLoading}
         />
-
         <CancelSubscriptionModal
           isOpen={isCancelModalOpen}
           onClose={() => setIsCancelModalOpen(false)}
           onConfirm={handleCancelConfirm}
           isLoading={isActionLoading}
-          balance={selectedSub.prepaidBalance.replace(' USDC', '')}
-          endDate={selectedSub.nextCharge}
+          balance={selectedSub?.prepaidBalance?.replace(' USDC', '') || '0'}
+          endDate={selectedSub?.nextCharge || 'N/A'}
         />
       </div>
     );
@@ -476,13 +496,12 @@ export default function Subscriptions() {
         onConfirm={handlePauseConfirm}
         isLoading={isActionLoading}
       />
-
       <CancelSubscriptionModal
         isOpen={isCancelModalOpen}
         onClose={() => setIsCancelModalOpen(false)}
         onConfirm={handleCancelConfirm}
         isLoading={isActionLoading}
-        balance={selectedSub?.prepaidBalance.replace(' USDC', '') || '0'}
+        balance={selectedSub?.prepaidBalance?.replace(' USDC', '') || '0'}
         endDate={selectedSub?.nextCharge || 'N/A'}
       />
     </div>
