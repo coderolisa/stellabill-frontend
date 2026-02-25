@@ -11,9 +11,11 @@ import OnboardingPayout from './pages/OnboardingPayout'
 import OnboardingReviewPage from './components/OnboardingReview'
 import UsageBilling from './pages/UsageBilling'
 import OnboardingSuccess from './pages/OnboardingSuccess'
+import CreatePlan from './pages/CreatePlan'
 import AboutPrepaidBalances from './components/AboutPrepaidBalances'
 import CreatePlan from "./pages/CreatePlan";
 import Pricing from "./pages/Pricing";
+
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
       <Route path="/subscriptions/:id/usage" element={<Layout><UsageBilling /></Layout>} />
 
       <Route path="/plans" element={<Layout><Plans /></Layout>} />
+      <Route path="/plans/create" element={<CreatePlan />} />
+      <Route path="/ui-kit" element={<UIMockups />} />
       <Route path="/plans/new" element={<CreatePlan />} />
 
       <Route path="/ui-kit" element={<Layout><UIMockups /></Layout>} />
