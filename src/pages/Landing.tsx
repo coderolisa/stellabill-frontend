@@ -2,6 +2,8 @@ import PricingCard from '@/components/PricingCard'
 import LandingNavbar from '../components/LandingNavbar'
 import { useEffect, useState } from 'react'
 import Hero from '../components/Landing/Hero'
+import TechBadges from "../components/landing/TechBadges"
+import CTACards from '../components/CTACards'
 import FlowDiagram from '../components/Landing/FlowDiagram'
 import TechBadges from "../components/landing/TechBadges";
 import SubscriptionActions from "@/components/SubscriptionActions";
@@ -42,6 +44,9 @@ export default function Landing() {
         <KeyMetrics />
         {/* Technology Badges */}
         <TechBadges />
+
+        {/* CTA Cards */}
+        <CTACards />
 
         {/* Sections for anchor links */}
         <div

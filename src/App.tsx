@@ -15,8 +15,8 @@ import UsageBilling from './pages/UsageBilling'
 import OnboardingSuccess from './pages/OnboardingSuccess'
 import CreatePlan from './pages/CreatePlan'
 import AboutPrepaidBalances from './components/AboutPrepaidBalances'
-import CreatePlan from "./pages/CreatePlan";
-import Pricing from "./pages/Pricing";
+import CreatePlan from "./pages/CreatePlan"
+import Pricing from "./pages/Pricing"
 
 
 function App() {
@@ -25,6 +25,7 @@ function App() {
       <Route path="/" element={<Landing />} />
       <Route path="/about-prepaid-balances" element={<AboutPrepaidBalances />} />
       <Route path="/onboarding-success" element={<OnboardingSuccess />} />
+      <Route path="/ui-kit" element={<UIMockups />} />
 
       <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
       <Route path="/plans" element={<Layout><Plans /></Layout>} />
@@ -42,13 +43,20 @@ function App() {
 
       <Route path="/ui-kit" element={<Layout><UIMockups /></Layout>} />
       <Route path="/pricing" element={<Pricing />} />
+      <Route element={<Layout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/subscriptions" element={<Subscriptions />} />
+        <Route path="/subscriptions/:id/usage" element={<UsageBilling />} />
+        <Route path="/subscriptions/:id" element={<SubscriptionDetail />} />
+        <Route path="/plans" element={<Plans />} />
+      </Route>
 
       <Route path="/onboarding/payout" element={<OnboardingPayout />} />
       <Route path="/onboarding/review" element={<OnboardingReviewPage />} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  );
+  )
 }
 
-export default App;
+export default App
