@@ -182,7 +182,7 @@ export default function Plans() {
           </p>
         </div>
         <button
-          onClick={() => navigate("/plans/new")}
+          onClick={() => navigate("/plans/create")}
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -993,8 +993,9 @@ export default function Plans() {
                   )}
                 </div>
               </div>
-            ))}
-          </div>
+            ))
+            }
+          </div >
         )}
         {filteredPlans.length === 0 && (
           <div
